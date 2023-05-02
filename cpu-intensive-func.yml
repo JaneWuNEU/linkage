@@ -1,0 +1,30 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  cpu-intensive-func:
+    lang: python3
+    handler: ./cpu-intensive-func
+    image: jingwuhust/cpu-intensive-func:v3
+    #limits:
+    #  memory: '50M'
+    #  cpu: '1'
+    #requests:
+    #  memory: '50M'
+    #  cpu: '1'
+    #skip_build: true
+    environment:
+      exec_timeout: 0 # disable
+      #max_inflight: '10'
+      #faas_gateway_invoke: "tre"
+    annotations:
+      #topic.max_inflight: "5"
+      watchdog: true
+      watchdog_timeout: '60'
+      com.openfaas.scale.max: 10
+    constraints:
+       - "location=slave02" 
+    #placement:
+    #   nodeSelector:
+    #    location: 'slave02'
